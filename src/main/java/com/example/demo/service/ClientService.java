@@ -2,7 +2,10 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ClientDTO;
 import com.example.demo.entity.Client;
+import com.example.demo.entity.Facture;
+import com.example.demo.dto.FactureDTO;
 import com.example.demo.repository.ClientRepository;
+import com.example.demo.repository.FactureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,15 +24,27 @@ public class ClientService {
     private ClientRepository clientRepository;
     @Autowired
     private ClientMapper clientMapper;
+	@Autowired
+	private FactureRepository factureRepository;
 
     public List<ClientDTO> findAllClients() {
-        List<Client> clients = clientRepository.findAll();
-        List<ClientDTO> dtos = new ArrayList<>();
-        for (Client client : clients) {
-            ClientDTO dto = clientMapper.map(client);
-            dtos.add(dto);
-        }
-        return dtos;
-//        return clientRepository.findAll().stream().map(c-> clientMapper.map(c)).collect(toList());
+		
+		return clientRepository.findAll().stream().map(c-> clientMapper.map(c)).collect(toList());
+		
     }
+	
+	private ClientDTO toDTO(Client client){
+		ClientDTO clientDTO = new ClientDTO();
+		ClientDTO.setId(client.getId());
+		ClientDTO.setNom(client.getNom());
+		ClientDTO.setPrenom(client.getPrenom());
+		ClientDTO.setAge(client.getAge());
+		return clientDTO;
+	}
+	
+	public ClientDTO findById(Long id) {
+		
+		return clientRepository.findById(id).map(this::toDTO).orElseThrow(() -> new IllegalArgumentException("Client inconnu " + id));
+		
+	}
 }

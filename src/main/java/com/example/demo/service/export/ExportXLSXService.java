@@ -19,24 +19,23 @@ public class ExportXLSXService {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("clients");
 
-        XSSFRow rowHeader = sheet.createRow(0);
+		//Header
+        XSSFRow header = sheet.createRow(0);
+		header.createCell(0).setCellValue("NOM");
+        header.getCell(0).setCellStyle(style);
+    	header.createCell(1).setCellValue("PRENOM");
+        header.getCell(1).setCellStyle(style);
+		header.createCell(2).setCellValue("AGE");
+        header.getCell(2).setCellStyle(style);
 
+		//Header Style 
+		CellStyle style = workbook.createCellStyle();
         XSSFFont defaultFont = workbook.createFont();
         defaultFont.setFontHeightInPoints((short) 10);
-        defaultFont.setFontName("Arial");
+        defaultFont.setFontName("Calibri");
         defaultFont.setBold(true);
         defaultFont.setItalic(true);
-
-        XSSFCell headerNom = rowHeader.createCell(0);
-        headerNom.getCellStyle().setFont(defaultFont);
-        headerNom.setCellValue("Nom");
-
-        XSSFCell headerPrenom = rowHeader.createCell(1);
-        headerPrenom.setCellValue("Prénom");
-
-        for (int index = 0; index < clients.size(); index++) {
-            XSSFRow row1 = sheet.createRow(index + HEADER_SIZE);
-        }
+		style.setFont(defaultFont);
 
         int rowNum = 1;
         for (ClientDTO client : clients) {
@@ -47,6 +46,9 @@ public class ExportXLSXService {
 
             XSSFCell cellPrenom = row1.createCell(1);
             cellPrenom.setCellValue(client.getNom());
+			
+			XSSFCell cellAge = row1.createCell(2);
+            cellAge.setCellValue(client.getAge());
 
             rowNum++;
         }
@@ -58,9 +60,83 @@ public class ExportXLSXService {
 
     public void exportFacturesDUnClient(ServletOutputStream outputStream, List<FactureDTO> factures) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        for (FactureDTO facture : factures) {
-            XSSFSheet sheet = workbook.createSheet("facture" + facture.getId());
+        XSSFSheet sheet = workbook.createSheet("clients");
+		
+		//Header
+        XSSFRow header = sheet.createRow(0);
+		header.createCell(0).setCellValue("NOM");
+        header.getCell(0).setCellStyle(style);
+    	header.createCell(1).setCellValue("PRENOM");
+        header.getCell(1).setCellStyle(style);
+		header.createCell(2).setCellValue("AGE");
+        header.getCell(2).setCellStyle(style);
+
+		//Header Style 
+		CellStyle style = workbook.createCellStyle();
+        XSSFFont defaultFont = workbook.createFont();
+        defaultFont.setFontHeightInPoints((short) 10);
+        defaultFont.setFontName("Calibri");
+        defaultFont.setBold(true);
+        defaultFont.setItalic(true);
+		style.setFont(defaultFont);	
+		
+		Integer i = 1;
+		Double Total = 0.0;
+		Double LinePrice = 0.0;
+
+		
+		for (FactureDTO facture : factures) {
+			XSSFRow headerRow = sheet.createRow(1);
+    		XSSFCell cellNom = headerRow.createCell(0);
+    		cellNom.setCellValue(facture.getClient().getNom());
+    		XSSFCell cellPrenom = headerRow.createCell(1);
+    		cellPrenom.setCellValue(facture.getClient().getPrenom());
+			XSSFCell cellAge = headerRow.createCell(1);
+    		cellAge.setCellValue(facture.getClient().getAge());
+    		
+			XSSFSheet sheet2 = workbook.createSheet("Facture " + String.valueOf(facture.getId()));	
+    		// Header
+        	XSSFRow header2 = sheet2.createRow(0);
+        	header2.createCell(0).setCellValue("Libellé Article");
+        	header2.getCell(0).setCellStyle(style);
+        	header2.createCell(1).setCellValue("Prix Unitaire");
+        	header2.getCell(1).setCellStyle(style);
+        	header2.createCell(2).setCellValue("Quantité");
+        	header2.getCell(2).setCellStyle(style);
+        	header2.createCell(3).setCellValue("Montant Ligne");
+        	header2.getCell(3).setCellStyle(style);
+        	
+
+        	Integer j = 1;
+        	
+        	for (LigneFactureDTO lf : facture.getLigneFactures()) {
+        		XSSFRow Row = sheet2.createRow(j);
+        		XSSFCell cellLib = Row.createCell(0);
+        		cellLib.setCellValue(lf.getDesignation());
+        		XSSFCell cellPriceU = Row.createCell(1);
+        		cellPriceU.setCellValue(lf.getPrixUnitaire() + " €");
+        		XSSFCell cellQty = Row.createCell(2);
+        		cellQty.setCellValue(lf.getQuantite());
+        		
+        		LinePrice = lf.getQuantite() * lf.getPrixUnitaire();
+        		Total += LinePrice;
+        		
+        		XSSFCell cellMntLigne = Row.createCell(3);
+        		cellMntLigne.setCellValue(String.valueOf(LinePrice)  + " €");
+        		
+        		j++;
+        	}
+        	
+        	// Line Total
+        	XSSFRow RowTotal = sheet2.createRow(j + 1);
+        	RowTotal.createCell(0).setCellValue("Total");
+        	RowTotal.createCell(1).setCellValue("");
+        	RowTotal.createCell(2).setCellValue("");
+        	RowTotal.createCell(3).setCellValue(String.valueOf(Total) + " €");
+    		
+    		i++;
         }
+		
         workbook.write(outputStream);
         workbook.close();
     }

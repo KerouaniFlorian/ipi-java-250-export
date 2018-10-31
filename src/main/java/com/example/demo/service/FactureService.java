@@ -1,7 +1,11 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.ClientDTO;
+import com.example.demo.entity.Client;
+import com.example.demo.dto.FactureDTO;
 import com.example.demo.dto.FactureDTO;
 import com.example.demo.entity.Facture;
+import com.example.demo.entity.LigneFacture;
 import com.example.demo.repository.FactureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,27 +23,39 @@ public class FactureService {
     @Autowired
     private FactureRepository factureRepository;
     @Autowired
-    private FactureMapper factureMapper;
+    private ClientMapper clientMapper;
 
+	private FactureDTO toDTO(Facture f) {
+        FactureDTO factureDTO = new FactureDTO();
+        factureDTO.setId(f.getId());
+        factureDTO.setClient(clientMapper.map(f.getClient()));
+        factureDTO.setLigneFactures(f.getLigneFactures().stream().map(this::mapLigneFacture).collect(toList()));
+        return factureDTO;
+    }
+
+    private LigneFactureDTO mapLigneFacture(LigneFacture lf) {
+        LigneFactureDTO ligneFactureDTO = new LigneFactureDTO();
+        ligneFactureDTO.setDesignation(lf.getArticle().getLibelle());
+        ligneFactureDTO.setQuantite(lf.getQuantite());
+        ligneFactureDTO.setPrixUnitaire(lf.getArticle().getPrix());
+        return ligneFactureDTO;
+    }
+	
     public List<FactureDTO> findAllFactures() {
-        return factureRepository.findAll().stream().map(factureMapper::map).collect(toList());
+		List<Facture> FacturefindAll = factureRepository.findAll();
+        return FacturefindAll.stream().map(this::toDTO).collect(toList());
     }
 
     public FactureDTO findById(Long id) {
         return factureRepository.findById(id)
-                .map(factureMapper::map)
+                .map(this::toDTO)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Facture inconnu " + id)
                 );
     }
 
-    public List<FactureDTO> findByClientId(Long clientId) {
-        List<Facture> factures = factureRepository.findByClientId(clientId);
-        List<FactureDTO> dtos = new ArrayList<>();
-        for (Facture facture : factures) {
-            FactureDTO factureDTO = factureMapper.map(facture);
-            dtos.add(factureDTO);
-        }
-        return dtos;
+    public List<FactureDTO> findAllByIdClient(Long id) {
+        return factureRepository.findAllByClientId(id).stream().map(this::mapLigneFacture).collect(toList());
     }
+	
 }
