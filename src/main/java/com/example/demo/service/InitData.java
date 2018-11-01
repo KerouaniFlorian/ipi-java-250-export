@@ -56,18 +56,18 @@ public class InitData {
         em.persist(client5);
 
 		Article article = new Article();
-		artcle.setLibelle("Clé USB");
-		artcle.setPrix(9.90);
+		article.setLibelle("Clé USB");
+		article.setPrix(9.90);
         em.persist(article);
 		
         Article article1 = new Article();
-		artcle1.setLibelle("Carte mère ASROCK 2345");
-		artcle1.setPrix(79.90);
+        article1.setLibelle("Carte mère ASROCK 2345");
+        article1.setPrix(79.90);
         em.persist(article1);
 		
 		Article article2 = new Article();
 		article2.setLibelle("GTX 1080Ti 11Go");
-		article2.setPrix(800);
+		article2.setPrix(800.00);
         em.persist(article2);
 		
 		Article article3 = new Article();
@@ -77,7 +77,7 @@ public class InitData {
 		
 		Article article4 = new Article();
 		article4.setLibelle("Core i9-9900K");
-		article4.setPrix(500);
+		article4.setPrix(500.00);
         em.persist(article4);
 
 		Facture facture = new Facture();

@@ -1,17 +1,15 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.ClientDTO;
-import com.example.demo.entity.Client;
 import com.example.demo.dto.FactureDTO;
-import com.example.demo.dto.FactureDTO;
+import com.example.demo.dto.LigneFactureDTO;
 import com.example.demo.entity.Facture;
 import com.example.demo.entity.LigneFacture;
 import com.example.demo.repository.FactureRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -33,11 +31,11 @@ public class FactureService {
         return factureDTO;
     }
 
-    private LigneFactureDTO mapLigneFacture(LigneFacture lf) {
-        LigneFactureDTO ligneFactureDTO = new LigneFactureDTO();
-        ligneFactureDTO.setDesignation(lf.getArticle().getLibelle());
-        ligneFactureDTO.setQuantite(lf.getQuantite());
-        ligneFactureDTO.setPrixUnitaire(lf.getArticle().getPrix());
+    private LigneFactureDTO mapLigneFacture(LigneFacture ligneFacture) {
+    	LigneFactureDTO ligneFactureDTO = new LigneFactureDTO();
+        ligneFactureDTO.setDesignation(ligneFacture.getArticle().getLibelle());
+        ligneFactureDTO.setQuantite(ligneFacture.getQuantite());
+        ligneFactureDTO.setPrixUnitaire(ligneFacture.getArticle().getPrix());
         return ligneFactureDTO;
     }
 	
@@ -55,7 +53,7 @@ public class FactureService {
     }
 
     public List<FactureDTO> findAllByIdClient(Long id) {
-        return factureRepository.findAllByClientId(id).stream().map(this::mapLigneFacture).collect(toList());
+        return factureRepository.findAllByClientId(id).stream().map(this::toDTO).collect(toList());
     }
 	
 }

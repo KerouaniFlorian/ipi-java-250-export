@@ -1,6 +1,5 @@
 package com.example.demo.service.export;
 
-import com.example.demo.dto.ClientDTO;
 import com.example.demo.dto.FactureDTO;
 import com.example.demo.dto.LigneFactureDTO;
 
@@ -16,7 +15,6 @@ import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.Phrase;
 
 import org.springframework.stereotype.Service;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.OutputStream;

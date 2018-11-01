@@ -2,17 +2,13 @@ package com.example.demo.service;
 
 import com.example.demo.dto.ClientDTO;
 import com.example.demo.entity.Client;
-import com.example.demo.entity.Facture;
-import com.example.demo.dto.FactureDTO;
 import com.example.demo.repository.ClientRepository;
 import com.example.demo.repository.FactureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,10 +31,10 @@ public class ClientService {
 	
 	private ClientDTO toDTO(Client client){
 		ClientDTO clientDTO = new ClientDTO();
-		ClientDTO.setId(client.getId());
-		ClientDTO.setNom(client.getNom());
-		ClientDTO.setPrenom(client.getPrenom());
-		ClientDTO.setAge(client.getAge());
+		clientDTO.setId(client.getId());
+		clientDTO.setNom(client.getNom());
+		clientDTO.setPrenom(client.getPrenom());
+		clientDTO.setAge(client.getAge());
 		return clientDTO;
 	}
 	

@@ -2,6 +2,9 @@ package com.example.demo.service.export;
 
 import com.example.demo.dto.ClientDTO;
 import com.example.demo.dto.FactureDTO;
+import com.example.demo.dto.LigneFactureDTO;
+
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,15 @@ public class ExportXLSXService {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("clients");
 
+		//Header Style 
+		CellStyle style = workbook.createCellStyle();
+        XSSFFont defaultFont = workbook.createFont();
+        defaultFont.setFontHeightInPoints((short) 10);
+        defaultFont.setFontName("Calibri");
+        defaultFont.setBold(true);
+        defaultFont.setItalic(true);
+		style.setFont(defaultFont);
+		
 		//Header
         XSSFRow header = sheet.createRow(0);
 		header.createCell(0).setCellValue("NOM");
@@ -28,14 +40,6 @@ public class ExportXLSXService {
 		header.createCell(2).setCellValue("AGE");
         header.getCell(2).setCellStyle(style);
 
-		//Header Style 
-		CellStyle style = workbook.createCellStyle();
-        XSSFFont defaultFont = workbook.createFont();
-        defaultFont.setFontHeightInPoints((short) 10);
-        defaultFont.setFontName("Calibri");
-        defaultFont.setBold(true);
-        defaultFont.setItalic(true);
-		style.setFont(defaultFont);
 
         int rowNum = 1;
         for (ClientDTO client : clients) {
@@ -62,15 +66,6 @@ public class ExportXLSXService {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("clients");
 		
-		//Header
-        XSSFRow header = sheet.createRow(0);
-		header.createCell(0).setCellValue("NOM");
-        header.getCell(0).setCellStyle(style);
-    	header.createCell(1).setCellValue("PRENOM");
-        header.getCell(1).setCellStyle(style);
-		header.createCell(2).setCellValue("AGE");
-        header.getCell(2).setCellStyle(style);
-
 		//Header Style 
 		CellStyle style = workbook.createCellStyle();
         XSSFFont defaultFont = workbook.createFont();
@@ -79,6 +74,16 @@ public class ExportXLSXService {
         defaultFont.setBold(true);
         defaultFont.setItalic(true);
 		style.setFont(defaultFont);	
+		
+		
+		//Header
+        XSSFRow header = sheet.createRow(0);
+		header.createCell(0).setCellValue("NOM");
+        header.getCell(0).setCellStyle(style);
+    	header.createCell(1).setCellValue("PRENOM");
+        header.getCell(1).setCellStyle(style);
+		header.createCell(2).setCellValue("AGE");
+        header.getCell(2).setCellStyle(style);
 		
 		Integer i = 1;
 		Double Total = 0.0;
