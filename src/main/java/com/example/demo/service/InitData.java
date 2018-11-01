@@ -22,37 +22,37 @@ public class InitData {
 		Client client = new Client();
 		client.setNom("Kerouani");
 		client.setPrenom("Florian");
-		client.setAge("24");
+		client.setAge(24);
 		em.persist(client);
 		
 		Client client1 = new Client();
 		client1.setNom("Martin");
 		client1.setPrenom("Lucas");
-		client1.setAge("17");
+		client1.setAge(17);
         em.persist(client1);
 		
 		Client client2 = new Client();
 		client2.setNom("Farmer");
 		client2.setPrenom("Mylène");
-		client2.setAge("57");
+		client2.setAge(57);
         em.persist(client2);
 		
 		Client client3 = new Client();
 		client3.setNom("Forissier");
 		client3.setPrenom("Gwenaelle");
-		client3.setAge("28");
+		client3.setAge(28);
         em.persist(client3);
 		
 		Client client4 = new Client();
 		client4.setNom("Hani");
 		client4.setPrenom("Katia");
-		client4.setAge("22");
+		client4.setAge(22);
         em.persist(client4);
 		
 		Client client5 = new Client();
 		client5.setNom("Dupont");
 		client5.setPrenom("Anthony");
-		client5.setAge("40");
+		client5.setAge(40);
         em.persist(client5);
 
 		Article article = new Article();
